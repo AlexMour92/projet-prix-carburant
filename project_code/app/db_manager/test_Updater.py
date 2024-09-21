@@ -13,7 +13,7 @@ from project_code.app.db_manager.Updater import Updater
 class TestUpdater(unittest.TestCase):
 
     def setUp(self):
-        # Créer un DataFrame de test
+        # Create a test DataFrame
         self.test_df = pd.DataFrame({
             'id': ['1', '2'],
             'latitude': ['48.8566', '45.7640'],
@@ -28,11 +28,11 @@ class TestUpdater(unittest.TestCase):
             'e85_prix': ['0.7', '0.8']
         })
 
-        # Créer un mock pour DBManager
+        # Create a mock for DBManager
         self.mock_db = Mock()
         self.mock_db.get_id_fuel.side_effect = [1, 2, 3, 4, 5, 6]
 
-        # Créer l'objet Updater
+        # Create the Updater object
         self.updater = Updater(self.test_df)
         self.updater.mydb = self.mock_db
 
@@ -75,7 +75,7 @@ class TestUpdater(unittest.TestCase):
         self.assertEqual(result[0]['prix'], 1.5)
 
     def test_get_stations_to_insert(self):
-        # Mise à jour de ce test pour refléter le comportement attendu
+        # Update this test to reflect the expected behavior
         stations_in_db = pd.DataFrame({'idStation': [1]})
         self.mock_db.get_all_stations.return_value = stations_in_db
 
