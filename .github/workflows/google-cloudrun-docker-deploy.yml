@@ -6,7 +6,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  JOB_NAME: 'prod-carburant-etl'
+  JOB_NAME: 'test-carburant-etl'
   REGION: ${{ secrets.GCP_REGION }}
 
 jobs:
