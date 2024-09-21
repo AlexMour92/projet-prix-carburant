@@ -22,7 +22,7 @@ class TestDBManager(unittest.TestCase):
     @patch('google.oauth2.service_account.Credentials.from_service_account_info')
     @patch('os.path.exists')
     def test_init(self, mock_exists, mock_credentials, mock_client):
-        # Scénario 1: GOOGLE_APPLICATION_CREDENTIALS_JSON est défini
+        # Scenario 1: GOOGLE_APPLICATION_CREDENTIALS_JSON is defined
         with patch.dict(os.environ, {'GOOGLE_APPLICATION_CREDENTIALS_JSON': base64.b64encode(json.dumps({"project_id": "test-project"}).encode()).decode()}):
             mock_exists.return_value = False
             mock_credentials.return_value = MagicMock()
@@ -34,7 +34,7 @@ class TestDBManager(unittest.TestCase):
             mock_client.reset_mock()
             mock_credentials.reset_mock()
 
-        # Scénario 2: SERVICE_KEY_PATH existe
+        # Scenario 2: SERVICE_KEY_PATH exists
         with patch.dict(os.environ, {}, clear=True):
             mock_exists.return_value = True
             with patch('google.cloud.bigquery.Client.from_service_account_json') as mock_from_json:
@@ -42,7 +42,7 @@ class TestDBManager(unittest.TestCase):
                 mock_from_json.assert_called_once()
             mock_client.assert_not_called()
 
-        # Scénario 3: Aucune des conditions précédentes n'est remplie
+        # Scenario 3: None of the previous conditions are met
         mock_exists.return_value = False
         DBManager()
         mock_client.assert_called_once()
