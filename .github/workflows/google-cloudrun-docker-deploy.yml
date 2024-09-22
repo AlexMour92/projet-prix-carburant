@@ -65,20 +65,22 @@ jobs:
 
       - name: Mise à jour ou création du Job sur Cloud Run
         run: |
-          if gcloud run jobs describe ${{ env.JOB_NAME }} --region=${{ env.REGION }} &> /dev/null; then
+          if gcloud run jobs describe "${{ env.JOB_NAME }}" --region="${{ env.REGION }}" &> /dev/null; then
             echo "Le job existe, mise à jour en cours..."
-            gcloud run jobs update ${{ env.JOB_NAME }} \
-              --image gcr.io/${{ env.PROJECT_ID }}/${{ env.JOB_NAME }}:${{ github.sha }} \
-              --region ${{ env.REGION }} \
-              --set-env-vars=PROJECT_ID=${{ env.PROJECT_ID }},GOOGLE_APPLICATION_CREDENTIALS_JSON=${{ secrets.BIGQUERY_SA_KEY }} \
+            gcloud run jobs update "${{ env.JOB_NAME }}" \
+              --image "gcr.io/${{ env.PROJECT_ID }}/${{ env.JOB_NAME }}:${{ github.sha }}" \
+              --region "${{ env.REGION }}" \
+              --set-env-vars="PROJECT_ID=${{ env.PROJECT_ID }}" \
+              --set-env-vars="GOOGLE_APPLICATION_CREDENTIALS_JSON=${{ secrets.BIGQUERY_SA_KEY }}" \
               --max-retries=3 \
               --task-timeout=3600s
           else
             echo "Le job n'existe pas, création en cours..."
-            gcloud run jobs create ${{ env.JOB_NAME }} \
-              --image gcr.io/${{ env.PROJECT_ID }}/${{ env.JOB_NAME }}:${{ github.sha }} \
-              --region ${{ env.REGION }} \
-              --set-env-vars=PROJECT_ID=${{ env.PROJECT_ID }},GOOGLE_APPLICATION_CREDENTIALS_JSON=${{ secrets.BIGQUERY_SA_KEY }} \
+            gcloud run jobs create "${{ env.JOB_NAME }}" \
+              --image "gcr.io/${{ env.PROJECT_ID }}/${{ env.JOB_NAME }}:${{ github.sha }}" \
+              --region "${{ env.REGION }}" \
+              --set-env-vars="PROJECT_ID=${{ env.PROJECT_ID }}" \
+              --set-env-vars="GOOGLE_APPLICATION_CREDENTIALS_JSON=${{ secrets.BIGQUERY_SA_KEY }}" \
               --max-retries=3 \
               --task-timeout=3600s
           fi
