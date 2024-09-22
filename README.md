@@ -6,4 +6,4 @@ L'objectif de ce projet est de créer une chaine décisionnelle complète:
   * Exploitation et visualisation des données récoltées via un **dashboard** sur **Google Looker Studio**.
   * Réalisation de prédiction sur les séries temporelles.
 
-## Pipeline ETL**
+## Pipeline ETL
