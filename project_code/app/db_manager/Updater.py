@@ -90,7 +90,7 @@ class Updater:
         now_datetime = datetime.now().isoformat(' ', timespec='seconds')[:19]
 
         datetime_to_insert = [{'idDate': next_id_date,
-                               'datetime': now_datetime}]
+                               'heureDate': now_datetime}]
         return datetime_to_insert, next_id_date
 
     def get_prices_to_insert(self, id_date: int) -> list:
