@@ -60,7 +60,7 @@ class TestUpdater(unittest.TestCase):
 
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]['idDate'], 1)
-        self.assertIsInstance(result[0]['datetime'], str)
+        self.assertIsInstance(result[0]['heureDate'], str)
         self.assertEqual(id_date, 1)
 
     def test_get_prices_to_insert(self):
