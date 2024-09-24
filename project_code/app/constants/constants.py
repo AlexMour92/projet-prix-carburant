@@ -96,7 +96,7 @@ DTYPES = {
 # Columns used in the database
 COLUMNS_TO_USE = [
     'id', 'latitude', 'longitude', 'cp',
-    'ville', 'gazole_prix', 'sp95_prix', 'e85_prix',
+    'ville', 'adresse', 'code_departement', 'gazole_prix', 'sp95_prix', 'e85_prix',
     'gplc_prix', 'e10_prix', 'sp98_prix'
 ]
 

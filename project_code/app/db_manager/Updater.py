@@ -126,11 +126,15 @@ class Updater:
 
         for index, row in self.df.iterrows():
             if int(row['id']) not in stations_in_database.idStation.values:
-                new_station = {'idStation': int(row['id']),
-                               'latitude': float(row['latitude']),
-                               'longitude': float(row['longitude']),
-                               'cp': int(row['cp']),
-                               'ville': str(row['ville'])}
+                new_station = {
+                    'idStation': int(row['id']),
+                    'latitude': float(row['latitude']),
+                    'longitude': float(row['longitude']),
+                    'cp': int(row['cp']),
+                    'ville': str(row['ville']),
+                    'adresse': str(row['adresse']),
+                    'codeDepartement': int(row['code_departement'])
+                    }
                 stations_to_insert.append(new_station)
         return stations_to_insert
 
