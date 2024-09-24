@@ -20,6 +20,8 @@ class TestUpdater(unittest.TestCase):
             'longitude': ['2.3522', '4.8357'],
             'cp': ['75001', '69001'],
             'ville': ['Paris', 'Lyon'],
+            'adresse': ['1 Rue de Rivoli', '1 Place Bellecour'],
+            'code_departement': ['75', '69'],
             'gazole_prix': ['1.5', '1.6'],
             'gplc_prix': ['0.8', '0.9'],
             'sp95_prix': ['1.7', '1.8'],
@@ -81,7 +83,15 @@ class TestUpdater(unittest.TestCase):
 
         result = self.updater.get_stations_to_insert()
 
-        expected_result = [{'idStation': 2, 'latitude': 45.7640, 'longitude': 4.8357, 'cp': 69001, 'ville': 'Lyon'}]
+        expected_result = [{
+            'idStation': 2,
+            'latitude': 45.7640,
+            'longitude': 4.8357,
+            'cp': 69001,
+            'adresse': '1 Place Bellecour',
+            'codeDepartement': 69,
+            'ville': 'Lyon'
+        }]
         self.assertEqual(result, expected_result)
 
     def test_get_list_fuels(self):
