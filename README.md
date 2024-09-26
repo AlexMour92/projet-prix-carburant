@@ -1,8 +1,11 @@
 Ce projet est une application d'analyse de données journalières qui suit et analyse les prix des carburants dans la région Île-de-France. L'objectif est de créer une chaine décisionnelle complète:
   * Création d'un **pipeline ETL** en **Python** pour récupérer les données de l'API du gouvernement [Prix des carburants - Flux instantanées - v2](https://data.economie.gouv.fr/explore/dataset/prix-des-carburants-en-france-flux-instantane-v2/api/).
   * Mise en place d'un **entrepôt de données** sur **Google BigQuery**.
-  * Exploitation et visualisation des données récoltées via un [**dashboard** sur **Google Looker Studio**.](https://lookerstudio.google.com/s/gkexJF_uqkI)
-  * Réalisation de prédiction sur les séries temporelles.
+  * Exploitation et visualisation des données récoltées via un [**dashboard**](https://lookerstudio.google.com/s/gkexJF_uqkI) sur **Google Looker Studio**. Le dashboard est centré sur les **décisions d'achats**:
+    - Décisions d'achats de voiture grâce à l'évolution des prix et les taux de détention des carburants.
+    - Décisions d'achats de carburants grâce aux prix journaliers.
+    - Choix de la stations la plus avantageuse autour de moi grace aux données géographiques.
+  * Réalisation de prédictions sur les séries temporelles.
 
 # Pipeline ETL et entrepôt de données
 
