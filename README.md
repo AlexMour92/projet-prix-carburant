@@ -68,45 +68,45 @@ Gestion sécurisée des secrets et des variables d'environnement via GitHub Secr
 
 # Dashboard et Visualisation des Données
 
-Pour exploiter les données récoltées par notre pipeline ETL, j'ai créé un dashboard interactif sur Google Looker Studio. Ce dashboard offre une vue d'ensemble complète et détaillée des prix des carburants en Île-de-France, permettant aux utilisateurs d'analyser les tendances et de prendre des décisions éclairées.
+Pour exploiter les données récoltées par notre pipeline ETL, j'ai créé un dashboard interactif sur Google Looker Studio. Ce dashboard offre une vue d'ensemble complète et détaillée des prix des carburants en Île-de-France, permettant aux utilisateurs d'analyser les tendances et de prendre des **décisions d'achats éclairées**.
 
 ## Caractéristiques principales du dashboard :
 
 ### Vue d'ensemble des prix moyens :
 
-  * Affichage en temps réel des prix moyens pour chaque type de carburant (Gazole, GPLc, Sans Plomb 95, Sans Plomb 98, E10, E85).
-  * Indication des variations de prix par rapport à la période précédente.
+  * **Affichage en temps réel des prix moyens journaliers** pour chaque type de carburant (Gazole, GPLc, Sans Plomb 95, Sans Plomb 98, E10, E85).
+  * Indication des **variations de prix** par rapport à la période précédente.
 
 ### Évolution des prix :
 
-  * Graphique linéaire montrant l'évolution des prix journaliers moyens pour tous les types de carburants.
+  * Graphique linéaire montrant l'**évolution des prix journaliers moyens** pour tous les types de carburants.
   * Permet de visualiser les tendances sur une période donnée.
 
 ### Taux de détention en Île-de-France :
 
-  * Graphique en barres illustrant la disponibilité de chaque type de carburant dans les stations-service de la région.
+  * Graphique en barres illustrant la **disponibilité de chaque type de carburant** dans les stations-service de la région.
 
 ### Stations les moins chères :
 
-  * Tableau listant les stations-service proposant les prix les plus bas, avec des filtres pour le type de carburant, le département et la ville.
+  * Tableau listant les stations-service proposant les **prix les plus bas**, avec des filtres pour le type de carburant, le département et la ville.
 
-## Ma station :
+### Ma station :
 
   * Section personnalisable permettant aux utilisateurs de suivre les prix d'une station spécifique.
   * Affichage des prix actuels et de leur évolution dans le temps.
   * Carte interactive montrant l'emplacement de la station sélectionnée.
 
 
-## Carte des prix :
+### Carte des prix :
 
   * Carte interactive de l'Île-de-France affichant les stations-service avec un code couleur basé sur leurs prix.
   * Filtres pour sélectionner le type de carburant et le département.
 
 ## Avantages du dashboard :
 
-  * Visibilité en temps réel : Les utilisateurs peuvent accéder aux dernières données sur les prix des carburants, mises à jour quotidiennement.
-  * Analyse comparative : Facilite la comparaison des prix entre différents types de carburants et différentes zones géographiques.
-  * Personnalisation : Les utilisateurs peuvent se concentrer sur les données les plus pertinentes pour eux, que ce soit un type de carburant spécifique ou une zone géographique particulière.
-  * Aide à la décision : Fournit des informations précieuses pour les consommateurs cherchant à optimiser leurs dépenses en carburant, ainsi que pour les analystes du marché.
+  * **Visibilité en temps réel** : Les utilisateurs peuvent accéder aux dernières données sur les prix des carburants, mises à jour quotidiennement.
+  * **Analyse comparative** : Facilite la comparaison des prix entre différents types de carburants et différentes zones géographiques.
+  * **Personnalisation** : Les utilisateurs peuvent se concentrer sur les données les plus pertinentes pour eux, que ce soit un type de carburant spécifique ou une zone géographique particulière.
+  * **Aide à la décision** : Fournit des informations précieuses pour les consommateurs cherchant à optimiser leurs dépenses en carburant, ainsi que pour les analystes du marché.
 
 Ce dashboard représente la finalité de notre chaîne décisionnelle, transformant les données brutes collectées en informations exploitables et visuellement attrayantes. Il démontre la puissance de l'analyse de données appliquée à un cas d'usage concret et quotidien.
