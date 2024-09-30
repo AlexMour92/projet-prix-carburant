@@ -110,3 +110,57 @@ Pour exploiter les données récoltées par notre pipeline ETL, j'ai créé un d
   * **Aide à la décision** : Fournit des informations précieuses pour les consommateurs cherchant à optimiser leurs dépenses en carburant, ainsi que pour les analystes du marché.
 
 Ce dashboard représente la finalité de notre chaîne décisionnelle, transformant les données brutes collectées en informations exploitables et visuellement attrayantes. Il démontre la puissance de l'analyse de données appliquée à un cas d'usage concret et quotidien.
+
+# Modèle Prédictif avec XGBoost
+
+Dans le cadre de l'extension de notre projet d'analyse des prix des carburants, nous avons développé un modèle prédictif utilisant XGBoost. Cette étape préparatoire vise à établir une méthodologie robuste pour la prédiction des prix des carburants, en attendant d'avoir suffisamment de données pour l'Île-de-France.
+
+## Étude de Cas : Prédiction des Prix du Gazole A1 aux USA
+ * **Objectif:**
+   Développer et tester un modèle prédictif pour les prix des carburants, applicable à terme aux données d'Île-de-France.
+ * **Données:**
+   Utilisation des données historiques des prix du carburant A1 aux États-Unis (All Grades All Formulations Retail Gasoline Prices) de 1995 à 2021.
+   
+## Méthodologie
+
+### Analyse Exploratoire des Données :
+L'analyse a révélé trois caractéristiques clés des données :
+
+ * Une faible saisonnalité
+ * Une forte influence des valeurs récentes de la série
+ * Un caractère non-stationnaire de la série
+
+### Feature Engineering :
+Basé sur les résultats de l'analyse exploratoire, j'ai créé plusieurs features pour améliorer les performances du modèle.
+
+### Modélisation avec XGBoost :
+
+ * Entraînement du modèle XGBoost pour des prédictions sur 6 mois (1 prédiction par semaine).
+ * Optimisation des hyperparamètres par Grid Search avec Cross Validation pour améliorer la précision.
+
+
+### Évaluation du Modèle :
+Le modèle XGBoost est comparé à un modèle de régression linéaire simple :
+
+ * **XGBoost RMSE** : 0.05 dollars/gallon sur les données de test
+ * **Modèle linéaire RMSE** : 0.88 dollars/gallon sur les données de test
+
+Le modèle XGBoost montre une amélioration significative, avec une erreur 17.6 fois plus faible que le modèle linéaire.
+
+![image](https://github.com/user-attachments/assets/743a8bc4-e0ed-42dc-98d4-303b929e0739)
+
+
+## Résultats et Interprétation
+
+L'erreur de 0.05 dollars/gallon du modèle XGBoost représente environ 1.9% d'un prix moyen typique de 2.7 dollars/gallon.
+En comparaison, l'erreur du modèle linéaire (0.88 dollars/gallon) représenterait environ 33% du même prix moyen.
+Cette précision accrue démontre la capacité de XGBoost à capturer les relations non linéaires complexes dans les données de prix des carburants.
+
+## Intégration Future au Dashboard
+À terme, les prédictions générées par ce modèle seront intégrées à notre dashboard Looker Studio, offrant aux utilisateurs :
+
+ * Des prévisions à court terme des prix des carburants en Île-de-France.
+ * Des recommandations pour optimiser les décisions d'achat de carburant.
+ * Une vue prospective pour aider à la planification budgétaire des consommateurs et des entreprises.
+
+Cette approche prédictive complète la chaîne décisionnelle, en ajoutant une dimension prospective à l'analyse des prix des carburants.
