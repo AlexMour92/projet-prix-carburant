@@ -1,8 +1,11 @@
 import pandas as pd
+import logging
 from datetime import datetime
 
 from db_manager.DBManager import DBManager
 from constants.constants import PRICE_TEMP_TABLE_ID, STATION_TABLE_ID, DATE_TABLE_ID
+
+logger = logging.getLogger(__name__)
 
 
 class Updater:
@@ -21,9 +24,11 @@ class Updater:
         This DataFrame is expected to have columns for station ID, latitude, longitude,
         postal code, city, and fuel prices for different types (e.g., gazole, gplc, sp95, etc.).
         """
+        logger.info("Initializing Updater")
         self.df = df.copy()  # Create a copy of the DataFrame to avoid modifying the original
         self.mydb = DBManager()  # Initialize the database manager object
 
+        logger.debug("Retrieving fuel IDs from database")
         # Get fuel IDs from database
         self.gazole_id = int(self.mydb.get_id_fuel('gazole'))
         self.gplc_id = int(self.mydb.get_id_fuel('gplc'))
@@ -31,6 +36,8 @@ class Updater:
         self.sp98_id = int(self.mydb.get_id_fuel('sp98'))
         self.e10_id = int(self.mydb.get_id_fuel('e10'))
         self.e85_id = int(self.mydb.get_id_fuel('e85'))
+
+        logger.info("Updater initialized successfully")
 
     def update_database(self):
         """
@@ -40,15 +47,26 @@ class Updater:
             1. Extracts data for Date, Stations (if not already present), and Prices.
             2. Inserts the extracted data into their respective tables in the database.
         """
+        logger.info("Starting database update process")
         # Extract data for insertion
         datetime_to_insert, id_date = self.get_datetime_to_insert()
         stations_to_insert = self.get_stations_to_insert()
         prices_to_insert = self.get_prices_to_insert(id_date)
+
         # Insert data into database tables
         if stations_to_insert.__len__() != 0:
+            logger.info(f"Inserting {len(stations_to_insert)} new stations")
             self.mydb.insert_list(stations_to_insert, STATION_TABLE_ID)
+        else:
+            logger.info("No new stations to insert")
+
+        logger.info(f"Inserting new date entry: {datetime_to_insert[0]['heureDate']}")
         self.mydb.insert_list(datetime_to_insert, DATE_TABLE_ID)
+
+        logger.info(f"Inserting {len(prices_to_insert)} new price entries")
         self.mydb.insert_list(prices_to_insert, PRICE_TEMP_TABLE_ID)
+
+        logger.info("Database update completed successfully")
 
     @staticmethod
     def get_new_price(id_station: int, fuel_id: int,
@@ -86,11 +104,13 @@ class Updater:
         :return: tuple: A tuple containing the datetime data as a dictionary and the next available ID for
         the date entry.
         """
+        logger.debug("Generating new datetime entry")
         next_id_date = self.mydb.get_max_id_date() + 1
         now_datetime = datetime.now().isoformat(' ', timespec='seconds')[:19]
 
         datetime_to_insert = [{'idDate': next_id_date,
                                'heureDate': now_datetime}]
+        logger.debug(f"New datetime entry created: ID {next_id_date}, DateTime {now_datetime}")
         return datetime_to_insert, next_id_date
 
     def get_prices_to_insert(self, id_date: int) -> list:
@@ -102,6 +122,7 @@ class Updater:
         :param id_date: int: ID of the date associated with the price entries.
         :return: list: A list of dictionaries representing new price entries.
         """
+        logger.debug("Generating price entries for insertion")
         prices_to_insert = []
         next_id_price = self.mydb.get_max_id_price() + 1
 
@@ -111,6 +132,8 @@ class Updater:
                 new_price = self.get_new_price(int(row['id']), fuel_id, fuel_price, next_id_price, id_date)
                 next_id_price += 1
                 prices_to_insert.append(new_price)
+
+        logger.debug(f"Generated {len(prices_to_insert)} price entries")
         return prices_to_insert
 
     def get_stations_to_insert(self) -> list:
@@ -121,6 +144,7 @@ class Updater:
         inserted.
         :return: list: A list of dictionaries representing new station entries.
         """
+        logger.debug("Identifying new stations for insertion")
         stations_to_insert = []
         stations_in_database = self.mydb.get_all_stations()
 
@@ -136,6 +160,8 @@ class Updater:
                     'codeDepartement': int(row['code_departement'])
                     }
                 stations_to_insert.append(new_station)
+
+        logger.debug(f"Identified {len(stations_to_insert)} new stations for insertion")
         return stations_to_insert
 
     def get_list_fuels(self, row: pd.Series):

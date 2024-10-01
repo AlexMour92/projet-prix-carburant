@@ -1,8 +1,11 @@
 import pandas as pd
+import logging
 
 from requests import get, Response
 from constants.constants import API_URL, CSV_FILE_PATH, HEADERS, DTYPES
 from csv_tools.csv_tools import write_temp_csv, delete_temp_csv
+
+logger = logging.getLogger(__name__)
 
 
 def get_data_as_dataframe() -> pd.DataFrame:
@@ -14,18 +17,24 @@ def get_data_as_dataframe() -> pd.DataFrame:
     converts the CSV to a DataFrame, and then deletes the temporary file.
     :return: pd.DataFrame: A Pandas DataFrame containing the extracted data.
     """
+    logger.info("Starting data retrieval process")
     response = 0
 
     try:
         response = retrieve_data()
-        delete_temp_csv()  # # Ensure temporary CSV file is deleted before writing
+        logger.debug("Cleaning up old temporary files")
+        delete_temp_csv()  # Ensure temporary CSV file is deleted before writing
+        logger.debug("Writing API response to temporary CSV")
         write_temp_csv(response)
+        logger.info("Converting CSV to DataFrame")
         df = convert_csv_to_dataframe()
+        logger.debug("Cleaning up temporary CSV file")
         delete_temp_csv()  # Always delete the temporary file after use
+        logger.info(f"Data retrieval complete. DataFrame shape: {df.shape}")
         return df
     except ValueError as e:
-        print(f'Message: {str(e)}')
-
+        logger.error(f"Error during data retrieval: {str(e)}")
+        return pd.DataFrame()  # return an empty DataFrame
 
 def retrieve_data() -> Response:
     """
@@ -35,9 +44,12 @@ def retrieve_data() -> Response:
 
     :return: requests.Response: The HTTP response object containing the retrieved data.
     """
+    logger.info(f"Sending GET request to {API_URL}")
     response = get(API_URL)
     if response.status_code != 200:
+        logger.warning(f"Received unexpected status code: {response.status_code}")
         raise ValueError("Received code isn't 200.")
+    logger.info("API request successful")
     return response
 
 
@@ -49,6 +61,7 @@ def convert_csv_to_dataframe() -> pd.DataFrame:
 
     :return: pd.DataFrame: A Pandas DataFrame containing the data from the CSV file.
     """
+    logger.debug(f"Reading CSV file from {CSV_FILE_PATH}")
     return pd.read_csv(
         CSV_FILE_PATH,
         delimiter=';',

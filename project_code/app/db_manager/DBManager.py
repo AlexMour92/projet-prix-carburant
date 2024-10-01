@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import json
 import base64
+import logging
 
 from google.cloud import bigquery
 from google.oauth2 import service_account
@@ -11,6 +12,8 @@ from constants.constants import (SERVICE_KEY_PATH,
                                  FUEL_TABLE_ID,
                                  PRICE_TEMP_TABLE_ID,
                                  PRICE_PROD_TABLE_ID)
+
+logger = logging.getLogger(__name__)
 
 
 class DBManager:
@@ -30,16 +33,21 @@ class DBManager:
 
         Establishes a BigQuery client using the provided service account JSON key file path.
         """
+        logger.info("Initializing DBManager")
         if 'GOOGLE_APPLICATION_CREDENTIALS_JSON' in os.environ:
+            logger.debug("Using credentials from environment variable")
             # Décodage du JSON encodé en base64
             json_content = base64.b64decode(os.environ['GOOGLE_APPLICATION_CREDENTIALS_JSON']).decode('utf-8')
             json_acct_info = json.loads(json_content)
             credentials = service_account.Credentials.from_service_account_info(json_acct_info)
             self.client = bigquery.Client(credentials=credentials, project=json_acct_info['project_id'])
         elif os.path.exists(SERVICE_KEY_PATH):
+            logger.debug(f"Using service account key file: {SERVICE_KEY_PATH}")
             self.client = bigquery.Client.from_service_account_json(SERVICE_KEY_PATH)
         else:
+            logger.warning("No credentials found, using default authentication")
             self.client = bigquery.Client()
+        logger.info("DBManager initialized successfully")
 
     def get_max_id_date(self) -> int:
         """
@@ -50,12 +58,15 @@ class DBManager:
 
         :return: int: The highest idDate value in the dim_date table, or 0 if the table is empty.
         """
+        logger.debug(f"Retrieving max idDate from {DATE_TABLE_ID}")
         sql = (f"SELECT MAX(idDate) as idDate "
                f"FROM `{DATE_TABLE_ID}`")
         query_job = self.client.query(sql)
         df_result = query_job.result().to_dataframe()
         if df_result['idDate'].iloc[0] is not pd.NA:
+            logger.info(f"Max idDate retrieved")
             return int(df_result['idDate'].iloc[0])
+        logger.info(f"Max idDate not retrieved")
         return 0
 
     def get_max_id_price(self) -> int:
@@ -66,13 +77,16 @@ class DBManager:
 
         :return: int: The highest idPrix value in the fact_price table, or 0 if the table is empty.
                 """
+        logger.debug(f"Retrieving max idPrix from {PRICE_PROD_TABLE_ID}")
         sql = (f"SELECT MAX(idPrix) as idPrix "
                f"FROM `{PRICE_PROD_TABLE_ID}`")
         query_job = self.client.query(sql)
         df_result = query_job.result().to_dataframe()
 
         if df_result['idPrix'].iloc[0] is not pd.NA:
+            logger.info(f"Max idPrix retrieved")
             return int(df_result['idPrix'].iloc[0])
+        logger.info(f"Max idPrix not retrieved")
         return 0
 
     def get_id_fuel(self, fuel_name: str) -> int:
@@ -86,13 +100,16 @@ class DBManager:
         :param fuel_name: str: The name of the fuel to search for.
         :return: int: The idCarburant value for the specified fuel name, or 0 if the fuel name is not found.
         """
+        logger.debug(f"Retrieving idCarburant for fuel: {fuel_name}")
         sql = (f"SELECT idCarburant "
                f"FROM `{FUEL_TABLE_ID}` "
                f"WHERE nom = '{fuel_name}'")
         query_job = self.client.query(sql)
         df_result = query_job.result().to_dataframe()
         if df_result.size != 0:
+            logger.info(f"idCarburant retrieved")
             return int(df_result['idCarburant'].iloc[0])
+        logger.info(f"idCarburant not retrieved")
         return 0
 
     def get_all_stations(self) -> pd.DataFrame:
@@ -104,10 +121,12 @@ class DBManager:
 
         :return: pandas.DataFrame: A DataFrame containing all data from the stations table.
                 """
-        sql = (f"SELECT * "
+        logger.info(f"Retrieving all stations data from {STATION_TABLE_ID}")
+        sql = (f"SELECT idStation, latitude, longitude, cp, ville, codeDepartement, adresse "
                f"FROM {STATION_TABLE_ID}")
         query_job = self.client.query(sql)
         df_result = query_job.result().to_dataframe()
+        logger.info(f"Retrieved {len(df_result)} stations")
         return df_result
 
     def insert_list(self, list_to_insert: list, table_id: str) -> None:
@@ -122,7 +141,11 @@ class DBManager:
         a row to be inserted.
         :param table_id: str: The ID of the BigQuery table to insert the rows into.
         """
+        logger.info(f"Inserting {len(list_to_insert)} rows into {table_id}")
         table = self.client.get_table(table_id)
         errors = self.client.insert_rows(table=table, rows=list_to_insert)
         if not errors == []:
+            logger.error(f"Encountered errors while inserting rows: {errors}")
             print(f"Encountered errors while inserting row: {errors}")
+        else:
+            logger.info("Data inserted successfully")
