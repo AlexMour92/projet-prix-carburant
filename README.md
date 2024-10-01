@@ -5,7 +5,10 @@ Ce projet est une application d'analyse de données journalières qui suit et an
     - Décisions d'achats de voiture grâce à l'évolution des prix et les taux de détention des carburants.
     - Décisions d'achats de carburants grâce aux prix journaliers.
     - Choix de la stations la plus avantageuse autour de moi grace aux données géographiques.
-  * Réalisation de prédictions sur les séries temporelles.
+  * Création d'un [modèle prédictif pour les prix du carburant](https://github.com/AlexMour92/projet-prix-carburant/blob/main/Etude%20de%20cas%20-%20prix%20des%20carburants.ipynb) avec **XGBoost**:
+    -  Le modèle s'appuie sur un analyse d'une série temporelle pour définir un ensemble de features améliorants les performances de XGBoost.
+    -  Il permet des prédictions à 6 mois avec un faible taux d'erreur.
+    -  A titre comparatif, le RMSE de mon modèle est 17.6 fois plus faible que celui d'une régression linéaire simple et 4.2 fois plus faible qu'une implémentation naïve de XGBoost.
 
 # Pipeline ETL et entrepôt de données
 
