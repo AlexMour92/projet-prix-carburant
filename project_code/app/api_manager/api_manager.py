@@ -34,7 +34,6 @@ def get_data_as_dataframe() -> pd.DataFrame:
         return df
     except ValueError as e:
         logger.error(f"Error during data retrieval: {str(e)}")
-        return pd.DataFrame()  # return an empty DataFrame
 
 def retrieve_data() -> Response:
     """
